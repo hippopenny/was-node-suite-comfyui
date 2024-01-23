@@ -7351,6 +7351,32 @@ class WAS_Image_Save:
         subfolder_path = os.sep.join(subfolder_parts[:-1])
         return subfolder_path
 
+class WAS_Image_Save_With_Named_Input(WAS_Image_Save):
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "images": ("IMAGE", ),
+                "output_path": ("STRING", {"default": '[time(%Y-%m-%d)]', "multiline": False}),
+                "filename_delimiter": ("STRING", {"default":"_"}),
+                "filename_number_padding": ("INT", {"default":4, "min":1, "max":9, "step":1}),
+                "filename_number_start": (["false", "true"],),
+                "extension": (['png', 'jpg', 'jpeg', 'gif', 'tiff', 'webp', 'bmp'], ),
+                "quality": ("INT", {"default": 100, "min": 1, "max": 100, "step": 1}),
+                "lossless_webp": (["false", "true"],),
+                "overwrite_mode": (["false", "prefix_as_filename"],),
+                "show_history": (["false", "true"],),
+                "show_history_by_prefix": (["true", "false"],),
+                "embed_workflow": (["true", "false"],),
+                "show_previews": (["true", "false"],),
+            },
+            "hidden": {
+                "prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"
+            },
+            "optional": {
+                "filename_prefix": ("STRING", {"forceInput": True, "default": "HippoPenny"}),
+            }
+        }
 
 # LOAD IMAGE NODE
 class WAS_Load_Image:
@@ -13905,6 +13931,7 @@ NODE_CLASS_MAPPINGS = {
     "Image Rotate": WAS_Image_Rotate,
     "Image Rotate Hue": WAS_Image_Rotate_Hue,
     "Image Save": WAS_Image_Save,
+    "Image Save with Input": WAS_Image_Save_With_Named_Input,
     "Image Seamless Texture": WAS_Image_Make_Seamless,
     "Image Select Channel": WAS_Image_Select_Channel,
     "Image Select Color": WAS_Image_Select_Color,
